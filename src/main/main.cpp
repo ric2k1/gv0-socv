@@ -33,6 +33,8 @@ extern bool GVinitSimCmd();
 extern bool GVinitVrfCmd();
 extern bool GVinitAbcCmd();
 extern bool GVinitModCmd();
+extern bool GVinitBddCmd();
+extern bool GVinitProveCmd();
 
 static void
 usage() {
@@ -68,7 +70,8 @@ main(int argc, char** argv) {
     Yosys::yosys_setup();                     // initial yosys command
     Yosys::log_streams.push_back(&std::cout); // log yosys message
     if (!(GVinitCommonCmd() && GVinitNtkCmd() && GVinitSimCmd() &&
-          GVinitVrfCmd() && GVinitAbcCmd() && GVinitModCmd()))
+          GVinitVrfCmd() && GVinitAbcCmd() && GVinitModCmd() &&
+          GVinitBddCmd() && GVinitProveCmd()))
         return 1;
 
     GVCmdExecStatus status = GV_CMD_EXEC_DONE;
