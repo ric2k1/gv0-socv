@@ -23,9 +23,7 @@ GVNtkMgr::setBddOrder(const bool& file) {
     unsigned supportSize = getInputSize() + getInoutSize() + 2 * getFFSize();
     unsigned bddspsize   = bddMgrV->getNumSupports();
     if (supportSize >= bddMgrV->getNumSupports()) {
-        gvMsg(GV_MSG_ERR)
-            << "BDD Support Size is Smaller Than Current Design Required !!"
-            << endl;
+        gvMsg(GV_MSG_ERR) << "BDD Support Size is Smaller Than Current Design Required !!" << endl;
         return false;
     }
     // build support
@@ -73,8 +71,7 @@ GVNtkMgr::setBddOrder(const bool& file) {
     for (uint32_t i = 0; i < getFFConst0Size(); ++i) {
         assert(getGateType(getFFConst0(i)) == GV_NTK_OBJ_FF_NS);
         bddMgrV->addBddNodeV(getFFConst0(i).id, BddNodeV::_zero());
-        bddMgrV->addBddNodeV(getRoIdFromRiId(getFFConst0(i).id),
-                             BddNodeV::_zero());
+        bddMgrV->addBddNodeV(getRoIdFromRiId(getFFConst0(i).id), BddNodeV::_zero());
         ++supportId;
     }
 
@@ -87,7 +84,6 @@ GVNtkMgr::buildNtkBdd() {
     // Perform DFS traversal from DFF inputs, inout, and output gates.
     // Collect ordered nets to a GVNetVec
     // Construct BDDs in the DFS order
-    GVNtkMgr mgr; // The ntk mgr. You can get the ntk info from the manager.
 }
 
 void

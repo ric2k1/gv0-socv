@@ -17,27 +17,25 @@
 void
 BddMgrV::buildPInitialState() {
     // TODO : remember to set _initState
+    // Hint : use "gvNtkMgr" to get the network info from the manager 
     // set initial state to all zero
-    GVNtkMgr mgr; // The ntk mgr. You can get the ntk info from the manager.
 }
 
 void
 BddMgrV::buildPTransRelation() {
     // TODO : remember to set _tr, _tri
-    GVNtkMgr mgr; // The ntk mgr. You can get the ntk info from the manager.
-
+    // Hint : use "gvNtkMgr" to get the network info from the manager
 }
 
 void
 BddMgrV::buildPImage(int level) {
     // TODO : remember to add _reachStates and set _isFixed
+    // Hint : use "gvNtkMgr" to get the network info from the manager
     // note:: _reachStates record the set of reachable states
-    GVNtkMgr mgr; // The ntk mgr. You can get the ntk info from the manager.
-    
 }
 
 void
 BddMgrV::runPCheckProperty(const string& name, BddNodeV monitor) {
     // TODO : prove the correctness of AG(~monitor)
-    GVNtkMgr mgr; // The ntk mgr. You can get the ntk info from the manager.
+    // Hint : use "gvNtkMgr" to get the network info from the manager
 }
