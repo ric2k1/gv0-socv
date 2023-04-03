@@ -26,7 +26,8 @@ chmod +x <shell_script_filename>
 - **formal verification engine** --> berkeley-abc 
 - **simulator** --> yosys
 
-# GV tool's API 
+# GV tool's API
+- Please check the document above to get detailed tutorials in "gv0-socv/doc/"
 - Below are current supporting APIs, please type "help <command>" for detailed usage
     - **Common commands** 
     ```json=
@@ -105,5 +106,4 @@ chmod +x <shell_script_filename>
     GV PTRansrelation 
     ```
 
-# GV tool's set-system-mode flow
-- Please check the document above to get detailed tutorials in gv0-socv/doc/
+
