@@ -9,7 +9,7 @@
 # You can refer to "tutorial/GV_tutorial.pdf" for GV command
 # Also, you can refer to "tests/dofile/" command to play with "gvbdd-ref" 
 # ----------------------------------
-cd hw3/ref; ./gvbdd-ref; 
+cd hw3/ref; ./gvbdd-ref-{linux,mac}; 
 
 # ----------------------------------
 # In GV (this homework), the step you can try : 
