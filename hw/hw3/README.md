@@ -37,9 +37,9 @@ yosysSetup> print aig -summary
 yosysSetup> breset 500 8009 30011 
 yosysSetup> bsetorder -f 
 yosysSetup> bconstruct -all 
-v3> breport 30 
+yosysSetup> breport 50 
 yosysSetup> set system vrf 
-yosysSetup> pinit 
+vrf> pinit 
 ```
 
 ## Or you can just execute dofile 
