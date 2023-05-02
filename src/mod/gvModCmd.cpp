@@ -32,8 +32,7 @@ GVSetSystemCmd::exec(const string& option) {
     vector<string> options;
 
     GVCmdExec::lexOptions(option, options);
-    if (options.size() == 0)
-        return GVCmdExec::errorOption(GV_CMD_OPT_MISSING, "<(string mode)>");
+    if (options.size() == 0) return GVCmdExec::errorOption(GV_CMD_OPT_MISSING, "<(string mode)>");
 
     size_t n = options.size();
     for (size_t i = 0; i < n; ++i) {
@@ -73,8 +72,7 @@ GVResetCmd ::exec(const string& option) {
 
     vector<string> options;
     GVCmdExec::lexOptions(option, options);
-    if (options.size() > 1)
-        return GVCmdExec::errorOption(GV_CMD_OPT_EXTRA, options[1]);
+    if (options.size() > 1) return GVCmdExec::errorOption(GV_CMD_OPT_EXTRA, options[1]);
     if (options.size() == 1) {
         const string& token = options[0];
         if (myStrNCmp("abc", token, 1) == 0) {
@@ -106,17 +104,15 @@ GVResetCmd ::exec(const string& option) {
 void
 GVResetCmd ::usage(const bool& verbose) const {
     gvMsg(GV_MSG_IFO) << "Usage: RESET SYStem [ Abc | Yosys ]" << endl;
-    gvMsg(GV_MSG_IFO)
-        << "       If engine is specified, only delete the ntk stored inside. "
-           "However, it may be risky to only delete partial datas."
-        << endl;
+    gvMsg(GV_MSG_IFO) << " If engine is specified, only delete the ntk stored inside. However, it "
+                         "may be risky to only delete partial datas."
+                      << endl;
 }
 
 void
 GVResetCmd ::help() const {
     gvMsg(GV_MSG_IFO) << setw(20) << left << "RESET SYStem: "
-                      << "Delete all ntks in gv and reset to setup mode."
-                      << endl;
+                      << "Delete all ntks in gv and reset to setup mode." << endl;
 }
 
 GVCmdExecStatus
@@ -129,8 +125,7 @@ GVSetWizardCmd::exec(const string& option) {
     gvModMgr->setWizard(true);
     GVCmdExec::lexOptions(option, options);
     if (options.size() < 2)
-        return GVCmdExec::errorOption(GV_CMD_OPT_MISSING,
-                                      "<-File> <(string wizardFileName)>");
+        return GVCmdExec::errorOption(GV_CMD_OPT_MISSING, "<-File> <(string wizardFileName)>");
 
     size_t n = options.size();
     for (size_t i = 0; i < n; ++i) {
@@ -141,8 +136,7 @@ GVSetWizardCmd::exec(const string& option) {
                 isFile = true;
             }
         } else if (isFile) {
-            if (wizardFileName != "")
-                return GVCmdExec::errorOption(GV_CMD_OPT_EXTRA, token);
+            if (wizardFileName != "") return GVCmdExec::errorOption(GV_CMD_OPT_EXTRA, token);
             else {
                 wizardFileName = token;
             }
@@ -151,8 +145,7 @@ GVSetWizardCmd::exec(const string& option) {
     // Start read the wizard file content
     ifstream infile(wizardFileName);
     if (!infile) {
-        gvMsg(GV_MSG_IFO) << "[ERROR]: Wizard file name \"" + wizardFileName +
-                                 "\" not found !!\n";
+        gvMsg(GV_MSG_IFO) << "[ERROR]: Wizard file name \"" + wizardFileName + "\" not found !!\n";
         return GV_CMD_EXEC_ERROR;
     }
 
@@ -178,8 +171,7 @@ GVSetWizardCmd::exec(const string& option) {
     while (status != GV_CMD_EXEC_QUIT) {
         gvCmdMgr->setPrompt();
         gvModMgr->printWizardPrompt(promptPos, promptBound[wizardIdx]);
-        if (!firstPrompt)
-            gvModMgr->printWizardProgress(progress, promptBound.size());
+        if (!firstPrompt) gvModMgr->printWizardProgress(progress, promptBound.size());
 
         status = gvCmdMgr->execOneCmd();
 
