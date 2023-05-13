@@ -31,7 +31,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 
 //=================================================================================================
 // Basic Types & Minor Things:
-
+typedef unsigned int uint;
 
 #ifdef _MSC_VER
 typedef INT64              int64;
@@ -196,7 +196,7 @@ public:
 
     // Don't allow copying (error prone):
     vec<T>&  operator = (const vec<T>& other);
-             vec        (vec<T>& other) { TEMPLATE_FAIL; }
+             vec        (vec<T>& other) { /* TEMPLATE_FAIL;  */}
 
     // Duplicatation (preferred instead):
     void copyTo(vec<T>& copy) const { copy.clear(); copy.growTo(sz); for (int i = 0; i < sz; i++) new (&copy[i]) T(data[i]); }
