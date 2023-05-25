@@ -14,8 +14,7 @@ iteratively update current optimal matching until 3500 seconds and output curren
 if problem size is **not too large** $\rightarrow$ find **all possible matching** at once and find optimal matching
 ![](https://i.imgur.com/vDqvAjW.png)
 
-## gv0
-Verification research for general RTL/system-level designs (take 0.0)
+# GV
 
 ## GV tool installation
 ```json=
