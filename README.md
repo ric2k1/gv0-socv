@@ -1,7 +1,23 @@
-# gv0
+# ICCAD 2023 Problem A
+## Document
+[ICCAD 2023 Problem A report](https://docs.google.com/document/d/1IwRJmWurMKUFpEzGPRlqsisgXPsYYjdKnI81r-mT59s/edit)
+
+[CAD討論進度](https://docs.google.com/document/d/1_S91WvefRApemSWcJEM14oBDBZ7n9NKA2SnN2d04OFc/edit)
+
+## Main Algorithm
+* One matching 
+if problem size is **too large** $\rightarrow$ ***it is not pratical to find all possible matching***
+iteratively update current optimal matching until 3500 seconds and output current optimal matching
+![](https://i.imgur.com/kkqAPN7.png)
+
+* All matching
+if problem size is **not too large** $\rightarrow$ find **all possible matching** at once and find optimal matching
+![](https://i.imgur.com/vDqvAjW.png)
+
+## gv0
 Verification research for general RTL/system-level designs (take 0.0)
 
-# GV tool installation
+## GV tool installation
 ```json=
 git clone https://github.com/ric2k1/gv0-socv
 cd gv0-socv/
@@ -20,13 +36,13 @@ sudo ./SETUP.sh
 chmod +x <shell_script_filename>
 ```
 
-# GV tool's third-party tools
+## GV tool's third-party tools
 - **parser** --> [yosys](https://github.com/YosysHQ/yosys), [berkeley-abc](https://github.com/berkeley-abc/abc)
 - **file format converter** --> yosys
 - **formal verification engine** --> berkeley-abc 
 - **simulator** --> yosys
 
-# GV tool's API
+## GV tool's API
 - Please check the document above to get detailed tutorials in "gv0-socv/doc/"
 - Below are current supporting APIs, please type "help <command>" for detailed usage
     - **Common commands** 
@@ -105,5 +121,6 @@ chmod +x <shell_script_filename>
     GV PINITialstate 
     GV PTRansrelation 
     ```
+   
 
 
