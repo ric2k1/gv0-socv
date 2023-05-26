@@ -68,6 +68,9 @@ class SATMgr
         // Various proof engines
         void indBmc(const GVNetId&, SatProofRes&);
         void itpUbmc(const GVNetId&, SatProofRes&);
+        
+        // for us
+        void booleanMatching();
 
         // bind with a solver to get proof info.
         void           bind(GVSatSolver* ptrMinisat);

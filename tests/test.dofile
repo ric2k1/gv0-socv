@@ -3,5 +3,8 @@ abccmd help
 yosyscmd help
 re d -v design/SoCV/vending/vending-origin.v
 pr i -v
+set sys vrf
+help
+satv bm
 q -f
 

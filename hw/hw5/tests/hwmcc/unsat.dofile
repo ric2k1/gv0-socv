@@ -1,7 +1,0 @@
-set eng abc
-# Please change the file name below
-re d -aig hw/hw5/tests/hwmcc/pdtpmsfpmult.aig
-blast ntk
-set sys vrf
-satv itp -o 0
-quit -f
