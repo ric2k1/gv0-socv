@@ -32,8 +32,10 @@ class GVSatSolver
         void       assumeRelease();
         void       assumeProperty(const size_t&, const bool&);
         void       assertProperty(const size_t&, const bool&);
-        void       assumeProperty(const GVNetId& id, const bool& invert, const uint32_t& depth);
-        void       assertProperty(const GVNetId& id, const bool& invert, const uint32_t& depth);
+        void       assumeProperty(const GVNetId& id, const bool& invert,
+                                  const uint32_t& depth);
+        void       assertProperty(const GVNetId& id, const bool& invert,
+                                  const uint32_t& depth);
         const bool simplify();
         const bool solve();
         const bool assump_solve();
@@ -45,8 +47,12 @@ class GVSatSolver
         const bool          getDataValue(const size_t&) const;
         // Variable Interface Functions
         inline const size_t reserveFormula() { return getPosVar(newVar()); }
-        inline const bool   isNegFormula(const size_t& v) const { return (v & 1ul); }
-        inline const size_t getNegFormula(const size_t& v) const { return (v ^ 1ul); }
+        inline const bool   isNegFormula(const size_t& v) const {
+            return (v & 1ul);
+        }
+        inline const size_t getNegFormula(const size_t& v) const {
+            return (v ^ 1ul);
+        }
 
         // Gate Formula to Solver Functions
         void add_FALSE_Formula(const GVNetId&, const uint32_t&);
@@ -58,14 +64,26 @@ class GVSatSolver
         const bool existVerifyData(const GVNetId&, const uint32_t&);
         void       resizeNtkData(const uint32_t& num);
 
+        // Constructing proof model
+        // fa/fb = true if it is inverted
+        void addXorCNF(Var& vf, const GVNetId& a, bool fa, const GVNetId& b,
+                       bool fb);
+        void addCNF(Var& va, bool fa, Var& vb, bool fb);
+        void addCNF(const GVNetId&, bool fa, Var& vb, bool fb);
     private:
         const Var newVar();
         const Var getVerifyData(const GVNetId&, const uint32_t&) const;
-        void      addBoundedVerifyDataRecursively(const GVNetId&, const uint32_t&);
+        void addBoundedVerifyDataRecursively(const GVNetId&, const uint32_t&);
 
-        inline const Var    getOriVar(const size_t& v) const { return (Var)(v >> 1ul); }
-        inline const size_t getPosVar(const Var& v) const { return (((size_t)v) << 1ul); }
-        inline const size_t getNegVar(const Var& v) const { return ((getPosVar(v)) | 1ul); }
+        inline const Var getOriVar(const size_t& v) const {
+            return (Var)(v >> 1ul);
+        }
+        inline const size_t getPosVar(const Var& v) const {
+            return (((size_t)v) << 1ul);
+        }
+        inline const size_t getNegVar(const Var& v) const {
+            return ((getPosVar(v)) | 1ul);
+        }
 
         SolverV*     _solver;  // Pointer to a Minisat solver
         Var          _curVar;  // Variable currently

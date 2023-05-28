@@ -20,8 +20,8 @@ GVSatSolver::GVSatSolver(GVNtkMgr* ntk) : _ntk(ntk) {
     _curVar = 0;
     _solver->newVar();
     ++_curVar;
-    _ntkData = new vector<Var>[ntk->getNetSize()];
-    for (uint32_t i = 0; i < ntk->getNetSize(); ++i) _ntkData[i].clear();
+    _ntkData = new vector<Var>[ntk->getNetSize() + 1];
+    for (uint32_t i = 0; i < ntk->getNetSize() + 1; ++i) _ntkData[i].clear();
 }
 
 GVSatSolver::~GVSatSolver() {
@@ -40,8 +40,8 @@ GVSatSolver::reset() {
     _curVar = 0;
     _solver->newVar();
     ++_curVar;
-    _ntkData = new vector<Var>[_ntk->getNetSize()];
-    for (uint32_t i = 0; i < _ntk->getNetSize(); ++i) _ntkData[i].clear();
+    _ntkData = new vector<Var>[_ntk->getNetSize()+1];
+    for (uint32_t i = 0; i < _ntk->getNetSize()+1; ++i) _ntkData[i].clear();
 }
 
 void
@@ -60,13 +60,15 @@ GVSatSolver::assertProperty(const size_t& var, const bool& invert) {
 }
 
 void
-GVSatSolver::assumeProperty(const GVNetId& id, const bool& invert, const uint32_t& depth) {
+GVSatSolver::assumeProperty(const GVNetId& id, const bool& invert,
+                            const uint32_t& depth) {
     const Var var = getVerifyData(id, depth);
     _assump.push(mkLit(var, invert ^ id.cp));
 }
 
 void
-GVSatSolver::assertProperty(const GVNetId& id, const bool& invert, const uint32_t& depth) {
+GVSatSolver::assertProperty(const GVNetId& id, const bool& invert,
+                            const uint32_t& depth) {
     const Var var = getVerifyData(id, depth);
     _solver->addUnit(mkLit(var, invert ^ id.cp));
 }
@@ -119,7 +121,8 @@ GVSatSolver::getFormula(const GVNetId& id, const uint32_t& depth) {
 void
 GVSatSolver::resizeNtkData(const uint32_t& num) {
     vector<Var>* tmp = new vector<Var>[_ntk->getNetSize()];
-    for (uint32_t i = 0, j = (_ntk->getNetSize() - num); i < j; ++i) tmp[i] = _ntkData[i];
+    for (uint32_t i = 0, j = (_ntk->getNetSize() - num); i < j; ++i)
+        tmp[i] = _ntkData[i];
     delete[] _ntkData;
     _ntkData = tmp;
 }
@@ -222,7 +225,8 @@ GVSatSolver::addBoundedVerifyData(const GVNetId& id, const uint32_t& depth) {
 }
 
 void
-GVSatSolver::addBoundedVerifyDataRecursively(const GVNetId& id, const uint32_t& depth) {
+GVSatSolver::addBoundedVerifyDataRecursively(const GVNetId&  id,
+                                             const uint32_t& depth) {
     const GV_Ntk_Type_t type = gvNtkMgr->getGateType(id);
     if (existVerifyData(id, depth)) return;
     if (GV_NTK_OBJ_PI == type) add_PI_Formula(id, depth);
@@ -230,15 +234,15 @@ GVSatSolver::addBoundedVerifyDataRecursively(const GVNetId& id, const uint32_t& 
         uint32_t newDepth = depth;
         if (depth) {
             if (GV_NTK_OBJ_FF_NS == type) newDepth -= 1;
-            addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 0), newDepth);
+            addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 0),
+                                            newDepth);
         }
         add_FF_Formula(id, depth);
     } else if (GV_NTK_OBJ_AIG >= type) {
-        // if (GV_NTK_OBJ_PO == type) {
-        //     addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 0), depth);
-        //     add_FF_Formula(id, depth);
-        // } else
-        if (GV_NTK_OBJ_AIG == type) {
+        if (GV_NTK_OBJ_PO == type) {
+            addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 0), depth);
+            add_FF_Formula(id, depth);
+        } else if (GV_NTK_OBJ_AIG == type) {
             addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 0), depth);
             addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 1), depth);
             add_AND_Formula(id, depth);
@@ -253,6 +257,65 @@ GVSatSolver::addBoundedVerifyDataRecursively(const GVNetId& id, const uint32_t& 
 const bool
 GVSatSolver::existVerifyData(const GVNetId& id, const uint32_t& depth) {
     return getVerifyData(id, depth);
+}
+
+void
+GVSatSolver::addXorCNF(Var& vf, const GVNetId& a, bool fa, const GVNetId& b,
+                       bool fb) {
+
+    const Var var1 = getVerifyData(a, 0);
+    const Var var2 = getVerifyData(b, 0);
+    vf             = newVar();
+
+    vec<Lit> lits;
+    Lit      lf = mkLit(vf);
+    Lit      la = mkLit(var1, fa);
+    Lit      lb = mkLit(var2, fb);
+
+    lits.push(~la);
+    lits.push(lb);
+    lits.push(lf);
+    _solver->addClause(lits);
+    lits.clear();
+    lits.push(la);
+    lits.push(~lb);
+    lits.push(lf);
+    _solver->addClause(lits);
+    lits.clear();
+    lits.push(la);
+    lits.push(lb);
+    lits.push(~lf);
+    _solver->addClause(lits);
+    lits.clear();
+    lits.push(~la);
+    lits.push(~lb);
+    lits.push(~lf);
+    _solver->addClause(lits);
+    lits.clear();
+}
+
+void
+GVSatSolver::addCNF(Var& va, bool fa, Var& vb, bool fb) {
+    vec<Lit> lits;
+    Lit      la = fa ? ~Lit(va) : Lit(va);
+    Lit      lb = fb ? ~Lit(vb) : Lit(vb);
+    lits.push(la);
+    lits.push(lb);
+    _solver->addClause(lits);
+    lits.clear();
+}
+
+void
+GVSatSolver::addCNF(const GVNetId& a, bool fa, Var& vb, bool fb) {
+
+    const Var va = getVerifyData(a, 0);
+    vec<Lit>  lits;
+    Lit       la = fa ? ~Lit(va) : Lit(va);
+    Lit       lb = fb ? ~Lit(vb) : Lit(vb);
+    lits.push(la);
+    lits.push(lb);
+    _solver->addClause(lits);
+    lits.clear();
 }
 
 #endif

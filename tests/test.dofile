@@ -1,10 +1,10 @@
-help
-abccmd help
-yosyscmd help
-re d -v design/SoCV/vending/vending-origin.v
+set engine abc
+read design -aig inputs/merge.aig
+blast ntk
 pr i -v
 set sys vrf
-help
 satv bm
 q -f
 
+read design -v inputs/test.v//
+blast ntk//
