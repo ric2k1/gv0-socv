@@ -40,8 +40,8 @@ GVSatSolver::reset() {
     _curVar = 0;
     _solver->newVar();
     ++_curVar;
-    _ntkData = new vector<Var>[_ntk->getNetSize()+1];
-    for (uint32_t i = 0; i < _ntk->getNetSize()+1; ++i) _ntkData[i].clear();
+    _ntkData = new vector<Var>[_ntk->getNetSize() + 1];
+    for (uint32_t i = 0; i < _ntk->getNetSize() + 1; ++i) _ntkData[i].clear();
 }
 
 void
@@ -294,11 +294,25 @@ GVSatSolver::addXorCNF(Var& vf, const GVNetId& a, bool fa, const GVNetId& b,
     lits.clear();
 }
 
+// add a clause
 void
 GVSatSolver::addCNF(Var& va, bool fa, Var& vb, bool fb) {
     vec<Lit> lits;
-    Lit      la = fa ? ~Lit(va) : Lit(va);
-    Lit      lb = fb ? ~Lit(vb) : Lit(vb);
+    Lit      la = mkLit(va, fa);
+    Lit      lb = mkLit(vb, fb);
+    lits.push(la);
+    lits.push(lb);
+    _solver->addClause(lits);
+    lits.clear();
+}
+
+// add a clause
+void
+GVSatSolver::addCNF(const GVNetId& a, bool fa, Var& vb, bool fb) {
+    const Var va = getVerifyData(a, 0);
+    vec<Lit>  lits;
+    Lit       la = mkLit(va, fa);
+    Lit       lb = mkLit(vb, fb);
     lits.push(la);
     lits.push(lb);
     _solver->addClause(lits);
@@ -306,16 +320,66 @@ GVSatSolver::addCNF(Var& va, bool fa, Var& vb, bool fb) {
 }
 
 void
-GVSatSolver::addCNF(const GVNetId& a, bool fa, Var& vb, bool fb) {
+GVSatSolver::addAigCNF(Var& vf, const GVNetId& a, bool fa, const GVNetId& b,
+                       bool fb) {
 
     const Var va = getVerifyData(a, 0);
-    vec<Lit>  lits;
-    Lit       la = fa ? ~Lit(va) : Lit(va);
-    Lit       lb = fb ? ~Lit(vb) : Lit(vb);
+    const Var vb = getVerifyData(b, 0);
+    vf           = newVar();
+
+    vec<Lit> lits;
+    Lit      lf = mkLit(vf);
+    Lit      la = mkLit(va, fa);
+    Lit      lb = mkLit(vb, fb);
     lits.push(la);
+    lits.push(~lf);
+    _solver->addClause(lits);
+    lits.clear();
     lits.push(lb);
+    lits.push(~lf);
+    _solver->addClause(lits);
+    lits.clear();
+    lits.push(~la);
+    lits.push(~lb);
+    lits.push(lf);
     _solver->addClause(lits);
     lits.clear();
 }
+
+void
+GVSatSolver::addAigCNF(Var& vf, const Var& va, bool fa, const Var& vb, bool fb) {
+
+    vf = newVar();
+
+    vec<Lit> lits;
+    Lit      lf = mkLit(vf);
+    Lit      la = mkLit(va, fa);
+    Lit      lb = mkLit(vb, fb);
+    lits.push(la);
+    lits.push(~lf);
+    _solver->addClause(lits);
+    lits.clear();
+    lits.push(lb);
+    lits.push(~lf);
+    _solver->addClause(lits);
+    lits.clear();
+    lits.push(~la);
+    lits.push(~lb);
+    lits.push(lf);
+    _solver->addClause(lits);
+    lits.clear();
+}
+
+void
+GVSatSolver::addCNF(const vector<Var>& vas, vector<bool>& fas) {
+    vec<Lit> lits;
+    for (size_t i = 0; i < vas.size(); ++i) {
+        Lit la = mkLit(vas[i], fas[i]);
+        lits.push(la);
+    }
+    _solver->addClause(lits);
+    lits.clear();
+}
+
 
 #endif

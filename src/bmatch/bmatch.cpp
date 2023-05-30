@@ -38,55 +38,158 @@ SATMgr::booleanMatching() {
     for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
         gvSatSolver->addBoundedVerifyData(gvNtkMgr->getOutput(i), 0);
     }
-    cout << "builded circut relation, current clause: "
+    cout << "builded circuit relation, current clause: "
          << gvSatSolver->getNumClauses() << endl;
 
     // (1) input permutation matirx
-    vector<vector<Var>> inputMatrix(nPI1 * 2 + 2,vector<int>(nPI2));
-    for (int col = 0; col < nPI2; ++col) {
-        for (int row = 0; row < nPI1 * 2 + 2; ++row) {
+    vector<vector<Var>> inputMatrix(nPI2, vector<int>(nPI1 * 2 + 2));
+    for (int row = 0; row < nPI2; ++row) {
+        for (int col = 0; col < nPI1 * 2 + 2; ++col) {
             Var newVar            = gvSatSolver->newVar();
             inputMatrix[row][col] = newVar;
         }
     }
-    // ### for aij
     for (int i = 0; i < nPI2; ++i) {
         for (int j = 0; j < nPI1; ++j) {
-            // XOR xj == yi
-            Var XOR;
-            gvSatSolver->addXorCNF(XOR, gvNtkMgr->getInput(j), false,
+            // ### for aij -> XOR: xj == yi
+            Var XOR_a;
+            gvSatSolver->addXorCNF(XOR_a, gvNtkMgr->getInput(j), false,
                                    gvNtkMgr->getInput(i + nPI1), false);
-            gvSatSolver->addCNF(XOR, true, inputMatrix[j * 2][i], true);
+            gvSatSolver->addCNF(XOR_a, true, inputMatrix[i][j * 2], true);
+            // ### for bij -> XOR': xj' == yi
+            Var XOR_b;
+            gvSatSolver->addXorCNF(XOR_b, gvNtkMgr->getInput(j), true,
+                                   gvNtkMgr->getInput(i + nPI1), false);
+            gvSatSolver->addCNF(XOR_b, true, inputMatrix[i][j * 2 + 1], true);
         }
     }
-     cout << "building matrix -- aij end, current clause: " << gvSatSolver->getNumClauses()
-         << endl;
-   
-    // ### for bij
-    for (int i = 0; i < nPI2; ++i) {
-        for (int j = 0; j < nPI1; ++j) {
-            // XOR xj == yi
-            Var XOR;
-            gvSatSolver->addXorCNF(XOR, gvNtkMgr->getInput(j), true,
-                                   gvNtkMgr->getInput(i + nPI1), false);
-            gvSatSolver->addCNF(XOR, true, inputMatrix[j * 2 + 1][i],
-                                true);
-        }
-    }
-    cout << "building matrix -- bij end, current clause: " << gvSatSolver->getNumClauses()
-         << endl;
-    // ### for yi = constant 0 / 1
-    for (int col = 0; col < nPI2; ++col) {
+    // ### for zi/Oi -> yi = constant 0 / 1
+    for (int row = 0; row < nPI2; ++row) {
         // constant 0
-        gvSatSolver->addCNF(gvNtkMgr->getInput(col + nPI1), true,
-                            inputMatrix[col][nPI1 * 2], true);
-
+        gvSatSolver->addCNF(gvNtkMgr->getInput(row + nPI1), true,
+                            inputMatrix[row][nPI1 * 2], true);
         // constant 1
-        gvSatSolver->addCNF(gvNtkMgr->getInput(col + nPI1), false,
-                            inputMatrix[col][nPI1 * 2], true);
+        gvSatSolver->addCNF(gvNtkMgr->getInput(row + nPI1), false,
+                            inputMatrix[row][nPI1 * 2 + 1], true);
     }
-    cout << "builded matrix, current clause: " << gvSatSolver->getNumClauses()
-         << endl;
+    cout << "building input matrix -- aij bij end, current clause: "
+         << gvSatSolver->getNumClauses() << endl;
+
+
+    // constraints for input permutation matirx
+    //   (a) each input y map to x or 0/1
+    //       <=1: each two var AND can not be 1 (only a var can be 1)
+    for (int row = 0; row < inputMatrix.size(); ++row) {
+        for (int col = 0; col < inputMatrix[0].size() - 1; ++col)
+            for (int other = col + 1; other < inputMatrix[0].size(); ++other) {
+
+                Var newV = gvSatSolver->newVar();
+                gvSatSolver->addAigCNF(newV, inputMatrix[row][col], false,
+                                       inputMatrix[row][other], false);
+                gvSatSolver->assertProperty(newV, false);
+            }
+    }
+
+    bool result;
+    result = gvSatSolver->solve();
+    if (result) {
+        for (int row = 0; row < nPI2; ++row) {
+            for (int col = 0; col < nPI1 * 2 + 2; ++col) {
+                cout << gvSatSolver->getDataValue(inputMatrix[row][col]) << " ";
+            }
+            cout << endl;
+        }
+    } else {
+        cout << "UNSAT" << endl;
+    }
+
+    //      !=0: the whole row can not be 0
+    for (int row = 0; row < inputMatrix.size(); ++row) {
+        Var temp = gvSatSolver->newVar();
+        gvSatSolver->addAigCNF(temp, inputMatrix[row][0], true,
+                               inputMatrix[row][1], true);
+        for (int col = 2; col <= inputMatrix[0].size(); ++col) {
+            for (int j = 2; j < nPI2; ++j) {
+                Var newV = gvSatSolver->newVar();
+                gvSatSolver->addAigCNF(newV, inputMatrix[row][col], true, temp,
+                                       false);
+                temp = newV;
+            }
+            gvSatSolver->assertProperty(temp, false);
+        }
+    }
+
+    cout << "constraints (a) finished, current clause: "
+         << gvSatSolver->getNumClauses() << endl;
+
+    //   (b) many input y to one x -> can't be no mapping(?)
+    // y -> x
+    for (int j = 0; j < nPI1; ++j) {
+        vector<Var>  vas;
+        vector<bool> fas(nPI2 * 2, false);
+        for (int i = 0; i < nPI2; ++i) {
+            vas.push_back(inputMatrix[i][j * 2]);
+            vas.push_back(inputMatrix[i][j * 2 + 1]);
+        }
+        gvSatSolver->addCNF(vas, fas);
+    }
+    // y-> 0/1
+    vector<Var>  vas;
+    vector<bool> fas(nPI2, false);
+    // constant 0
+    for (int i = 0; i < nPI2; ++i) {
+        vas.push_back(inputMatrix[i][nPI1 * 2]);
+    }
+    gvSatSolver->addCNF(vas, fas);
+    vas.clear();
+    for (int i = 0; i < nPI2; ++i) {
+        vas.push_back(inputMatrix[i][nPI1 * 2]);
+    }
+    gvSatSolver->addCNF(vas, fas);
+    cout << "constraints (b) finished, current clause: "
+         << gvSatSolver->getNumClauses() << endl;
+
+    // (2) output permutation matirx
+    vector<vector<Var>> outputMatrix(nPO2, vector<int>(nPO1 * 2 + 2));
+    for (int row = 0; row < nPO2; ++row) {
+        for (int col = 0; col < nPO1 * 2 + 2; ++col) {
+            Var newVar             = gvSatSolver->newVar();
+            outputMatrix[row][col] = newVar;
+        }
+    }
+
+    for (int i = 0; i < nPO2; ++i) {
+        for (int j = 0; j < nPO1; ++j) {
+            // ### for cij -> XOR: fj == f*i
+            Var XOR_c;
+            gvSatSolver->addXorCNF(XOR_c, gvNtkMgr->getOutput(j), false,
+                                   gvNtkMgr->getOutput(i + nPO1), false);
+            gvSatSolver->addCNF(XOR_c, true, outputMatrix[i][j * 2], true);
+            // ### for bij -> XOR': fj' == f*i
+            Var XOR_d;
+            gvSatSolver->addXorCNF(XOR_d, gvNtkMgr->getOutput(j), true,
+                                   gvNtkMgr->getOutput(i + nPO1), false);
+            gvSatSolver->addCNF(XOR_d, true, outputMatrix[i][j * 2 + 1], true);
+        }
+    }
+    cout << "building output matrix -- cij dij end, current clause: "
+         << gvSatSolver->getNumClauses() << endl;
+
+    // constraints for output permutation matirx
+    //  many output f* map one output f sum<=1
+    for (int row = 0; row < outputMatrix.size(); ++row) {
+        // the same row -> one seat & the same column -> one man
+        for (int col = 0; col < outputMatrix[0].size() - 1; ++col)
+            for (int other = col + 1; other < outputMatrix[0].size(); ++other) {
+                Var newV = gvSatSolver->newVar();
+                gvSatSolver->addAigCNF(newV, outputMatrix[row][col], false,
+                                       outputMatrix[row][other], false);
+                gvSatSolver->assertProperty(newV, false);
+            }
+    }
+
+    cout << "constraints  finished, current clause: "
+         << gvSatSolver->getNumClauses() << endl;
 
     // while (1) {
 
@@ -99,6 +202,5 @@ SATMgr::booleanMatching() {
 
     // (miter UNSAT)
     // record score & exclude current matching (wish)
-
     // }
 }

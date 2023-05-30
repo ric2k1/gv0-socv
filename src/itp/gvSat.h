@@ -40,7 +40,7 @@ class GVSatSolver
         const bool solve();
         const bool assump_solve();
         int        getNumClauses() const { return _solver->nRootCla(); }
-
+       
         // Network to Solver Functions
         const size_t        getFormula(const GVNetId&, const uint32_t&);
         const GVBitVecX     getDataValue(const GVNetId&, const uint32_t&) const;
@@ -68,8 +68,15 @@ class GVSatSolver
         // fa/fb = true if it is inverted
         void addXorCNF(Var& vf, const GVNetId& a, bool fa, const GVNetId& b,
                        bool fb);
+        void addAigCNF(Var& vf, const GVNetId& a, bool fa, const GVNetId& b,
+                       bool fb);
+        void addAigCNF(Var& vf, const Var& va, bool fa, const Var& vb, bool fb);
+
+        // different type of addClause
         void addCNF(Var& va, bool fa, Var& vb, bool fb);
-        void addCNF(const GVNetId&, bool fa, Var& vb, bool fb);
+        void addCNF(const GVNetId& a, bool fa, Var& b, bool fb);
+        void addCNF(const vector<Var>& vas, vector<bool>& fas);
+
     private:
         const Var newVar();
         const Var getVerifyData(const GVNetId&, const uint32_t&) const;
