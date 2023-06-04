@@ -1,10 +1,9 @@
-set engine abc
-read design -aig inputs/merge.aig
+abccmd read ./tests/inputs/test1.v
+abccmd strash
+abccmd append tests/inputs/test2.v
+abccmd write_verilog tests/inputs/test.v
+
+read design -v tests/inputs/test.v
 blast ntk
 pr i -v
-set sys vrf
-satv bm
 q -f
-
-read design -v inputs/test.v//
-blast ntk//

@@ -70,7 +70,7 @@ class SATMgr
         void itpUbmc(const GVNetId&, SatProofRes&);
         
         // for us
-        void booleanMatching();
+        void booleanMatching(int, int, int, int);
 
         // bind with a solver to get proof info.
         void           bind(GVSatSolver* ptrMinisat);
@@ -110,6 +110,7 @@ class SATMgr
         // will be determined in retrieveProof, you don't need to take care about this!
         mutable vector<bool>      _isClaOnDup; // duplication & extension of _isClauseOn
         mutable vector<VAR_GROUP> _varGroup;   // mapping var to different groups
+
 };
 
 #endif /* SAT_MGR_H_ */
