@@ -19,7 +19,7 @@ using namespace std;
 // #define isGVNetInverted(netId) (netId.cp)
 
 void
-SATMgr::booleanMatching() {
+SATMgr::booleanMatching(int nPI1, int nPI2, int nPO1, int nPO2) {
     cout << "enter booleanMatching!" << endl;
     SatProofRes  pRes;
     GVSatSolver* gvSatSolver = new GVSatSolver(gvNtkMgr);
@@ -27,10 +27,18 @@ SATMgr::booleanMatching() {
 
     // assume input number= nPI1, nPI2
     // assume onput number= nPO1, nPO2
-    int nPI1 = 2;
-    int nPI2 = 2;
-    int nPO1 = 2;
-    int nPO2 = 2;
+    //int nPI1 = 2;
+    //int nPI2 = 2;
+    //int nPO1 = 2;
+    //int nPO2 = 2;
+
+    /*
+    for (int i = 0; i < gvNtkMgr->getInputSize(); ++i) {
+        cout<<"input:"<<i<<" "<<gvNtkMgr->getNetNameFromId(gvNtkMgr->getInput(i).id)<<endl;
+    }
+    for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
+        cout<<"output:"<<i<<" "<<gvNtkMgr->getNetNameFromId(gvNtkMgr->getOutput(i).id)<<endl;
+    }*/
 
     // bulid matrix
     // build each output Data

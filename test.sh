@@ -1,1 +1,1 @@
-./gv -f tests/append.dofile
+./gv -f tests/test.dofile
