@@ -4,8 +4,7 @@ module test1(
    c
 );
 
-input a;
-input b;
+input a, b;
 output c;
 
 assign c = a&b;

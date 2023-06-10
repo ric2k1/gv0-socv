@@ -29,7 +29,7 @@ debug:DEBUG_FLAG = -DGV_DEBUG
 LIB	     = libgv.a
 
 
-all debug:	srcLib
+all debug:	srcLib parser
 	@echo "Checking $(MAIN)..."
 	@cd src/$(MAIN); make --no-print-directory EXTLIB="$(SRCLIBS) $(EXTLIBS)" EXEC=$(EXEC); cd ../.. ;
 
@@ -68,6 +68,7 @@ clean:
 	@cd src/$(MAIN); make --no-print-directory clean
 	@echo "Removing $(EXEC)..."
 	@rm -f $(EXEC) 
+	@rm -f parser
 
 ctags:	
 	@rm -f src/tags
@@ -94,3 +95,6 @@ linux18 linux16 mac:
 	        cd lib; ln -sf lib$$pkg-$@.a lib$$pkg.a; cd ../..; \
 	done
 	@cd ref; ln -sf $(EXEC)-$@ $(EXEC);
+
+parser: parser.cpp
+	g++ parser.cpp -o2 -o parser

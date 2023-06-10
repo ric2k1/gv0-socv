@@ -5,9 +5,7 @@ module test2(
    f
 );
 
-input d;
-input e;
-input g;
+input d, e, g;
 output f;
 
 assign f = d & e | g;

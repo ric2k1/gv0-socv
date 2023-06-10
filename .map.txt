@@ -1,7 +1,0 @@
-input 0 0 a
-input 1 0 b
-input 2 0 d
-input 3 0 e
-input 4 0 g
-output 0 0 c
-output 1 0 f
