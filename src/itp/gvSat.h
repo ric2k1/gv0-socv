@@ -76,6 +76,11 @@ class GVSatSolver
         void addCNF(Var& va, bool fa, Var& vb, bool fb);
         void addCNF(const GVNetId& a, bool fa, Var& b, bool fb);
         void addCNF(const vector<Var>& vas, vector<bool>& fas);
+        void addCNF(const vector<GVNetId>& vs, vector<bool>& bs);
+        const int getVarValue(const Var& var) const;
+        GVNetId add_XNOR_gate(const GVNetId& a, const GVNetId& b);
+        GVNetId add_XOR_gate(const GVNetId& a, const GVNetId& b);
+        GVNetId add_OR_gate(const GVNetId& a, const GVNetId& b);
 
     private:
         const Var newVar();
