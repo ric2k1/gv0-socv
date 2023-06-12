@@ -55,7 +55,6 @@ abccmd write_aiger ./CAD_testdata/case09/merge.aig
 abccmd read_verilog ./CAD_testdata/case10/1.v
 abccmd strash
 abccmd append ./CAD_testdata/case10/2.v
-abccmd write_verilog ./CAD_testdata/case10/merge.v
 abccmd write_aiger ./CAD_testdata/case10/merge.aig
 
 q -f

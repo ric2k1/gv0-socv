@@ -52,12 +52,61 @@ SATMgr::booleanMatching(int nPI1, int nPI2, int nPO1, int nPO2) {
     }
     miterSolver->add_XNOR_gate(gvNtkMgr->getInput(0), gvNtkMgr->getInput(nPI1));
     assert(0);
-    // assume input number= nPI1, nPI2
-    // assume onput number= nPO1, nPO2
-    // int nPI1 = 2;
-    // int nPI2 = 2;
-    // int nPO1 = 2;
-    // int nPO2 = 2;
+
+    //cout<<"be "<<gvNtkMgr->getNetSize()<<endl;
+    //gvNtkMgr->createNet();
+    //cout<<"af "<<gvNtkMgr->getNetSize()<<endl;
+
+    //revise port name
+    string name;
+    for (int i = 0; i < gvNtkMgr->getInputSize(); ++i) {
+        name = gvNtkMgr->getNetNameFromId(gvNtkMgr->getInput(i).id).substr(1);
+        gvNtkMgr->setNetNameFromId(gvNtkMgr->getInput(i).id, name);
+        //cout<<"input:"<<i<<" "<<gvNtkMgr->getNetNameFromId(gvNtkMgr->getInput(i).id)<<endl;
+    }
+    for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
+        name = gvNtkMgr->getNetNameFromId(gvNtkMgr->getOutput(i).id).substr(1);
+        gvNtkMgr->setNetNameFromId(gvNtkMgr->getOutput(i).id, name);
+        //cout<<"output:"<<i<<" "<<gvNtkMgr->getNetNameFromId(gvNtkMgr->getOutput(i).id)<<endl;
+    }
+
+    //calculate PI PO
+    int circuit_number;
+    for (int i = 0; i < gvNtkMgr->getInputSize(); ++i) {
+        circuit_number = gvNtkMgr->getNetNameFromId(gvNtkMgr->getInput(i).id)[0] - '0';
+        switch (circuit_number)
+        {
+        case 1:
+            nPI1++;
+            break;
+        
+        case 2:
+            nPI2++;
+            break;
+        
+        default:
+            cerr<<"circuit number \""<<circuit_number<<"\" error"<<endl;
+            break;
+        }
+    }
+    for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
+        circuit_number = gvNtkMgr->getNetNameFromId(gvNtkMgr->getOutput(i).id)[0] - '0';
+        switch (circuit_number)
+        {
+        case 1:
+            nPO1++;
+            break;
+        
+        case 2:
+            nPO2++;
+            break;
+        
+        default:
+            cerr<<"circuit number \""<<circuit_number<<"\" error"<<endl;
+            break;
+        }
+    }
+    //cout<<"PI1 "<<nPI1<<" PI2 "<<nPI2<<" PO1 "<<nPO1<<" PO2 "<<nPO2<<endl;
 
     // bulid matrix
     // build each output Data

@@ -168,6 +168,7 @@ class GVNtkMgr
         inline unsigned getRoIdFromRiId(unsigned id) { return _idRi2Ro[id]; }
         // mapping (get name)
         inline string   getNetNameFromId(unsigned id) { return _netId2Name[id]; }
+        inline void     setNetNameFromId(unsigned id, string name) { _netId2Name[id] = name; }
 
         // -------------------------------------------------------------------------
         //                                Network
