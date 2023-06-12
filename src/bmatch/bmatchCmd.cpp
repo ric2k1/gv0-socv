@@ -28,14 +28,18 @@ GVCmdExecStatus
 SATVerifyBMatchCmd::exec(const string& option) {
     vector<string> options;
     GVCmdExec::lexOptions(option, options);
-    if (options.size() != 4){
-        return GVCmdExec::errorOption(GV_CMD_OPT_MISSING,
+    if (options.size() == 0){
+        satMgr->booleanMatching(0 ,0, 0, 0);
+    }
+    else if (options.size() == 4){
+        satMgr->booleanMatching(stoi(options[0]), stoi(options[1]), stoi(options[2]), stoi(options[3]));
+    }
+    else{
+        return GVCmdExec::errorOption(GV_CMD_OPT_ILLEGAL,
         "<(int nPI1), (int nPI2), (int nPO1), (int nPO2)>");
     }
-
     //if (n == 0)
         //return GVCmdExec::errorOption(GV_CMD_OPT_MISSING, options[1]);
-    satMgr->booleanMatching(stoi(options[0]), stoi(options[1]), stoi(options[2]), stoi(options[3]));
     return GV_CMD_EXEC_DONE;
 }
 

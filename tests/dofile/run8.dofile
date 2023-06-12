@@ -6,5 +6,6 @@ abccmd write_aiger ./CAD_testdata/case08/merge.aig
 
 read design -v ./CAD_testdata/case08/merge.v
 blast ntk
-pr i -v
+set system vrf
+satv bm
 q -f
