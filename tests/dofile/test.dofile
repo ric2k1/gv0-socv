@@ -6,4 +6,6 @@ abccmd write_verilog tests/inputs/merge.v
 read design -v tests/inputs/merge.v
 blast ntk
 pr i -v
+set sys vrf
+satv bm 2 3 1 1
 q -f

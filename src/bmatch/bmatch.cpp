@@ -42,11 +42,16 @@ static int getScore(GVSatSolver* matrixSolver, const vector<vector<Var>>& output
 void
 SATMgr::booleanMatching(int nPI1, int nPI2, int nPO1, int nPO2) {
     cout << "enter booleanMatching!" << endl;
-    SatProofRes  pRes;
+    // SatProofRes  pRes;
     GVSatSolver* matrixSolver = new GVSatSolver(gvNtkMgr);
     GVSatSolver* miterSolver = new GVSatSolver(gvNtkMgr);
-    pRes.setSatSolver(matrixSolver);
+    // pRes.setSatSolver(matrixSolver);
 
+    for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
+        miterSolver->addBoundedVerifyData(gvNtkMgr->getOutput(i), 0);
+    }
+    miterSolver->add_XNOR_gate(gvNtkMgr->getInput(0), gvNtkMgr->getInput(nPI1));
+    assert(0);
     // assume input number= nPI1, nPI2
     // assume onput number= nPO1, nPO2
     // int nPI1 = 2;
@@ -113,9 +118,6 @@ SATMgr::booleanMatching(int nPI1, int nPI2, int nPO1, int nPO2) {
          << endl;
     // build miter
     cout << "init current clause: " << miterSolver->getNumClauses() << endl;
-    for (int i = 0; i < gvNtkMgr->getInputSize(); ++i) {
-        miterSolver->addBoundedVerifyData(gvNtkMgr->getInput(i), 0);
-    }
     for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
         miterSolver->addBoundedVerifyData(gvNtkMgr->getOutput(i), 0);
     }
