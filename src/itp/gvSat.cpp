@@ -228,6 +228,7 @@ void
 GVSatSolver::addBoundedVerifyDataRecursively(const GVNetId&  id,
                                              const uint32_t& depth) {
     const GV_Ntk_Type_t type = gvNtkMgr->getGateType(id);
+    cout << "p2" << endl;
     if (existVerifyData(id, depth)) return;
     if (GV_NTK_OBJ_PI == type) add_PI_Formula(id, depth);
     else if (GV_NTK_OBJ_FF_CS == type || GV_NTK_OBJ_FF_NS == type) {
@@ -240,10 +241,15 @@ GVSatSolver::addBoundedVerifyDataRecursively(const GVNetId&  id,
         add_FF_Formula(id, depth);
     } else if (GV_NTK_OBJ_AIG >= type) {
         if (GV_NTK_OBJ_PO == type) {
+            cout << "PO id:" << id.id << endl;
+            cout << id.fanin0Cp << " " << _ntk->getInputNetId(id, 0).id << endl;
             addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 0), depth);
             add_FF_Formula(id, depth);
         } else if (GV_NTK_OBJ_AIG == type) {
+            cout << "AIG id:" << id.id << endl;
+            cout << id.fanin0Cp << " " << _ntk->getInputNetId(id, 0).id << endl;
             addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 0), depth);
+            cout << id.fanin0Cp << " " << _ntk->getInputNetId(id, 1).id << endl;
             addBoundedVerifyDataRecursively(_ntk->getInputNetId(id, 1), depth);
             add_AND_Formula(id, depth);
         } else {
@@ -381,5 +387,75 @@ GVSatSolver::addCNF(const vector<Var>& vas, vector<bool>& fas) {
     lits.clear();
 }
 
+// void
+// GVSatSolver::addCNF(const vector<Var>& vs, vector<bool>& bs) {
+//     vec<Lit> lits(vs.size());
+//     int count_V = 0;
+//     assert (vs.size() == bs.size());
+//     while (count_V < vs.size()) {
+//        lits[count_V] = bs[count_V] ? ~Lit(vs[count_V]) : Lit(vs[count_V]);
+//        ++count_V;
+//     }
+//     _solver->addClause(lits);
+//     lits.clear();
+// }
 
+void
+GVSatSolver::addCNF(const vector<GVNetId>& ids, vector<bool>& bs) {
+    vector<Var> vs(ids.size());
+    unsigned count_V = 0;
+    assert (vs.size() == bs.size());
+    while (count_V < ids.size()) {
+        vs[count_V] = getVerifyData(ids[count_V], 0);
+        ++count_V;
+    }
+    addCNF(vs,bs);
+}
+const int
+GVSatSolver::getVarValue(const Var& var) const {
+    return (_solver->model[var]==l_True?1:
+                (_solver->model[var]==l_False?0:-1));
+}
+GVNetId
+GVSatSolver::add_XNOR_gate(const GVNetId& a, const GVNetId& b) {
+    cout << "build XNOR" << endl;
+    unsigned num_ntk = gvNtkMgr->getNetSize();
+    cout << gvNtkMgr->getNetSize() << endl;
+    GVNetId buf_xnor1 = gvNtkMgr->createNet();
+    gvNtkMgr->createGVAndGate(buf_xnor1, ~a, ~b);
+    GVNetId buf_xnor2 = gvNtkMgr->createNet();
+    gvNtkMgr->createGVAndGate(buf_xnor2, a, b);
+    GVNetId _xnor = ~gvNtkMgr->createNet();
+    gvNtkMgr->createGVAndGate(_xnor, ~buf_xnor1, ~buf_xnor2);
+    cout << gvNtkMgr->getNetSize() << endl;
+    resizeNtkData(gvNtkMgr->getNetSize() - num_ntk);
+    cout << gvNtkMgr->getNetSize() << endl;
+    cout << buf_xnor1.id << endl;
+    cout << "p1" << endl;
+    addBoundedVerifyData(_xnor, 0);
+    return _xnor;
+}
+GVNetId
+GVSatSolver::add_XOR_gate(const GVNetId& a, const GVNetId& b) {
+    cout << "build XOR" << endl;
+    unsigned num_ntk = gvNtkMgr->getNetSize();
+    GVNetId buf_xor1 = gvNtkMgr->createNet();
+    gvNtkMgr->createGVAndGate(buf_xor1, ~a, b);
+    GVNetId buf_xor2 = gvNtkMgr->createNet();
+    gvNtkMgr->createGVAndGate(buf_xor2, a, ~b);
+    GVNetId _xor = ~gvNtkMgr->createNet();
+    gvNtkMgr->createGVAndGate(_xor, ~buf_xor1, ~buf_xor2);
+    resizeNtkData(gvNtkMgr->getNetSize() - num_ntk);
+    addBoundedVerifyData(_xor, 0);
+    return _xor;
+}
+GVNetId
+GVSatSolver::add_OR_gate(const GVNetId& a, const GVNetId& b) {
+    unsigned num_ntk = gvNtkMgr->getNetSize();
+    GVNetId _or = ~gvNtkMgr->createNet();
+    gvNtkMgr->createGVAndGate(_or, ~a, ~b);
+    resizeNtkData(gvNtkMgr->getNetSize() - num_ntk);
+    addBoundedVerifyData(_or, 0);
+    return _or;
+}
 #endif
