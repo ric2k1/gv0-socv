@@ -1,12 +1,12 @@
-module top ( 2_x0 , 2_x1 , 2_y0 , 2_y1 , 2_z , 2_u0 , 2_u1 , 2_w0 , 2_w1 ) ;
-    input 2_x0 , 2_x1 , 2_y0 , 2_y1 , 2_z ;
-    output 2_u0 , 2_u1 , 2_w0 , 2_w1 ;
-    wire 2_n1 , 2_n2 , 2_n3 ;
-assign 2_n1 = ~(2_x1 & 2_y0);
-assign 2_n2 = ~(2_x0 & 2_y1);
-assign 2_n3 = ~(2_y0 & 2_z);
-assign 2_u0 = 2_y0 & 2_x0;
-assign 2_u1 = 2_n1 ^ 2_n2;
-assign 2_w0 = ~(2_y1 ^ 2_n3);
-assign 2_w1 = 2_y0 ^ 2_z;
+module top ( x0 , x1 , y0 , y1 , z , u0 , u1 , w0 , w1 ) ;
+    input x0 , x1 , y0 , y1 , z ;
+    output u0 , u1 , w0 , w1 ;
+    wire n1 , n2 , n3 ;
+assign n1 = ~(x1 & y0);
+assign n2 = ~(x0 & y1);
+assign n3 = ~(y0 & z);
+assign u0 = y0 & x0;
+assign u1 = n1 ^ n2;
+assign w0 = ~(y1 ^ n3);
+assign w1 = y0 ^ z;
 endmodule

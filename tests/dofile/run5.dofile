@@ -1,11 +1,10 @@
 abccmd read_verilog ./CAD_testdata/case05/1.v
 abccmd strash
-abccmd append ./CAD_testdata/case05/2.v
-abccmd write_verilog ./CAD_testdata/case05/merge.v
-abccmd write_aiger ./CAD_testdata/case05/merge.aig
+abccmd write_aiger -s ./CAD_testdata/case05/1.aig
+abccmd write_cnf ./CAD_testdata/case05/1.cnf
 
-read design -v ./CAD_testdata/case05/merge.v
-blast ntk
-set system vrf
-satv bm
+abccmd read_verilog ./CAD_testdata/case05/2.v
+abccmd strash
+abccmd write_aiger -s ./CAD_testdata/case05/2.aig
+abccmd write_cnf ./CAD_testdata/case05/2.cnf
 q -f

@@ -1,14 +1,14 @@
-module top ( 1_a0 , 1_a1 , 1_b0 , 1_b1 , 1_c , 1_h0 , 1_h1 , 1_m0 , 1_m1 ) ;
-    input 1_a0 , 1_a1 , 1_b1 , 1_b0 , 1_c ;
-    output 1_h0 , 1_h1 , 1_m0 , 1_m1 ;
-    wire 1_n1 , 1_n2 , 1_n3 , 1_n4 , 1_n5 ;
-assign 1_n1 = ~1_b1;
-assign 1_n2 = ~1_a0;
-assign 1_h0 = 1_a0 & 1_b0;
-assign 1_n3 = ~(1_a1 & 1_b0);
-assign 1_n4 = 1_n1 | 1_n2;
-assign 1_n5 = ~(1_b0 & 1_c);
-assign 1_h1 = 1_n3 ^ 1_n4;
-assign 1_m0 = ~(1_b1 ^ 1_n5);
-assign 1_m1 = 1_b0 ^ 1_c;
+module top ( a0 , a1 , b0 , b1 , c , h0 , h1 , m0 , m1 ) ;
+    input a0 , a1 , b1 , b0 , c ;
+    output h0 , h1 , m0 , m1 ;
+    wire n1 , n2 , n3 , n4 , n5 ;
+assign n1 = ~b1;
+assign n2 = ~a0;
+assign h0 = a0 & b0;
+assign n3 = ~(a1 & b0);
+assign n4 = n1 | n2;
+assign n5 = ~(b0 & c);
+assign h1 = n3 ^ n4;
+assign m0 = ~(b1 ^ n5);
+assign m1 = b0 ^ c;
 endmodule

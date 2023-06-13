@@ -41,7 +41,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
 
-		buf.insert(pos, tag);
+		//buf.insert(pos, tag);
         pos = buf.find(",", pos);
 		if(pos == -1){
             break;
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
 
-		buf.insert(pos, tag);
+		//buf.insert(pos, tag);
         pos = buf.find(",", pos);
 		if(pos == -1){
             break;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
 
-		buf.insert(pos, tag);
+		//buf.insert(pos, tag);
         pos = buf.find(",", pos);
 		if(pos == -1){
             break;
@@ -131,7 +131,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
 
-		buf.insert(pos, tag);
+		//buf.insert(pos, tag);
         pos = buf.find(",", pos);
 		if(pos == -1){
             break;
@@ -162,7 +162,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
         var1 = buf.substr(pos, cut_pos);
-        if(var1 != "1'b0" && var1 != "1'b1") var1 = tag + var1;
+        //if(var1 != "1'b0" && var1 != "1'b1") var1 = tag + var1;
 
         //var2
         pos = buf.find(", ", pos) + 2;
@@ -172,7 +172,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
         var2 = buf.substr(pos, cut_pos);
-        if(var2 != "1'b0" && var2 != "1'b1") var2 = tag + var2;
+        //if(var2 != "1'b0" && var2 != "1'b1") var2 = tag + var2;
 
         //var3
         pos = buf.find(", ", pos);
@@ -180,7 +180,7 @@ int main(int argc, char *argv[]){
             pos += 2;
             cut_pos = buf.find_first_of(" ", pos) - pos;
             var3 = buf.substr(pos, cut_pos);
-            if(var3 != "1'b0" && var3 != "1'b1") var3 = tag + var3;
+            //if(var3 != "1'b0" && var3 != "1'b1") var3 = tag + var3;
         }
 
         stringstream ss;

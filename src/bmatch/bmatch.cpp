@@ -46,28 +46,28 @@ SATMgr::booleanMatching(int nPI1, int nPI2, int nPO1, int nPO2) {
     GVSatSolver* matrixSolver = new GVSatSolver(gvNtkMgr);
     GVSatSolver* miterSolver = new GVSatSolver(gvNtkMgr);
     // pRes.setSatSolver(matrixSolver);
-
+    /*
     for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
         miterSolver->addBoundedVerifyData(gvNtkMgr->getOutput(i), 0);
     }
-    miterSolver->add_XNOR_gate(gvNtkMgr->getInput(0), gvNtkMgr->getInput(nPI1));
-    assert(0);
-
+    //miterSolver->add_XNOR_gate(gvNtkMgr->getInput(0), gvNtkMgr->getInput(nPI1));
+    //assert(0);
+    cout<<"good\n";
     //cout<<"be "<<gvNtkMgr->getNetSize()<<endl;
     //gvNtkMgr->createNet();
     //cout<<"af "<<gvNtkMgr->getNetSize()<<endl;
-
+    */
     //revise port name
     string name;
     for (int i = 0; i < gvNtkMgr->getInputSize(); ++i) {
         name = gvNtkMgr->getNetNameFromId(gvNtkMgr->getInput(i).id).substr(1);
         gvNtkMgr->setNetNameFromId(gvNtkMgr->getInput(i).id, name);
-        //cout<<"input:"<<i<<" "<<gvNtkMgr->getNetNameFromId(gvNtkMgr->getInput(i).id)<<endl;
+        cout<<"input:"<<i<<" "<<gvNtkMgr->getNetNameFromId(gvNtkMgr->getInput(i).id)<<endl;
     }
     for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
         name = gvNtkMgr->getNetNameFromId(gvNtkMgr->getOutput(i).id).substr(1);
         gvNtkMgr->setNetNameFromId(gvNtkMgr->getOutput(i).id, name);
-        //cout<<"output:"<<i<<" "<<gvNtkMgr->getNetNameFromId(gvNtkMgr->getOutput(i).id)<<endl;
+        cout<<"output:"<<i<<" "<<gvNtkMgr->getNetNameFromId(gvNtkMgr->getOutput(i).id)<<endl;
     }
 
     //calculate PI PO
@@ -106,7 +106,7 @@ SATMgr::booleanMatching(int nPI1, int nPI2, int nPO1, int nPO2) {
             break;
         }
     }
-    //cout<<"PI1 "<<nPI1<<" PI2 "<<nPI2<<" PO1 "<<nPO1<<" PO2 "<<nPO2<<endl;
+    cout<<"PI1 "<<nPI1<<" PI2 "<<nPI2<<" PO1 "<<nPO1<<" PO2 "<<nPO2<<endl;
 
     // bulid matrix
     // build each output Data
