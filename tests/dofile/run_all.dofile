@@ -1,0 +1,60 @@
+abccmd read_verilog ./CAD_testdata/case01/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case01/2.v
+abccmd write_verilog ./CAD_testdata/case01/merge.v
+abccmd write_aiger ./CAD_testdata/case01/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case02/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case02/2.v
+abccmd write_verilog ./CAD_testdata/case02/merge.v
+abccmd write_aiger ./CAD_testdata/case02/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case03/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case03/2.v
+abccmd write_verilog ./CAD_testdata/case03/merge.v
+abccmd write_aiger ./CAD_testdata/case03/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case04/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case04/2.v
+abccmd write_verilog ./CAD_testdata/case04/merge.v
+abccmd write_aiger ./CAD_testdata/case04/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case05/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case05/2.v
+abccmd write_verilog ./CAD_testdata/case05/merge.v
+abccmd write_aiger ./CAD_testdata/case05/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case06/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case06/2.v
+abccmd write_verilog ./CAD_testdata/case06/merge.v
+abccmd write_aiger ./CAD_testdata/case06/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case07/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case07/2.v
+abccmd write_verilog ./CAD_testdata/case07/merge.v
+abccmd write_aiger ./CAD_testdata/case07/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case08/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case08/2.v
+abccmd write_verilog ./CAD_testdata/case08/merge.v
+abccmd write_aiger ./CAD_testdata/case08/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case09/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case09/2.v
+abccmd write_verilog ./CAD_testdata/case09/merge.v
+abccmd write_aiger ./CAD_testdata/case09/merge.aig
+
+abccmd read_verilog ./CAD_testdata/case10/1.v
+abccmd strash
+abccmd append ./CAD_testdata/case10/2.v
+abccmd write_aiger ./CAD_testdata/case10/merge.aig
+
+q -f
