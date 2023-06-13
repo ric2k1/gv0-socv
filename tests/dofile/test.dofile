@@ -1,10 +1,8 @@
 abccmd read_verilog ./tests/inputs/test1.v
 abccmd strash
 abccmd write_aiger -s ./tests/inputs/test1.aig
-abccmd write_cnf ./tests/inputs/test1.cnf
 
 abccmd read_verilog ./tests/inputs/test2.v
 abccmd strash
 abccmd write_aiger -s ./tests/inputs/test2.aig
-abccmd write_cnf ./tests/inputs/test2.cnf
 q -f

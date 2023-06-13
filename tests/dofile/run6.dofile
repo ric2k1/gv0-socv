@@ -1,10 +1,10 @@
 abccmd read_verilog ./CAD_testdata/case06/1.v
 abccmd strash
 abccmd write_aiger -s ./CAD_testdata/case06/1.aig
-abccmd write_cnf ./CAD_testdata/case06/1.cnf
+abccmd write_aiger ./CAD_testdata/case06/circuit_1.aig
 
 abccmd read_verilog ./CAD_testdata/case06/2.v
 abccmd strash
 abccmd write_aiger -s ./CAD_testdata/case06/2.aig
-abccmd write_cnf ./CAD_testdata/case06/2.cnf
+abccmd write_aiger ./CAD_testdata/case06/circuit_2.aig
 q -f

@@ -12,12 +12,10 @@ constexpr unsigned int str2int(const char* str, int h = 0){
 
 int main(int argc, char *argv[]){
     char *in_filename = argv[1];
-    string out_filename = argv[2], tag = argv[3], line, buf;
-    tag += "_";
+    string out_filename = argv[2], line, buf;
     ifstream in_file(in_filename);
     cout<<out_filename<<endl;
     ofstream out_file(out_filename);
-    cout<<out_file.is_open()<<endl;
     //cerr<<in_filename<<" "<<tag<<endl;
 
     //Module

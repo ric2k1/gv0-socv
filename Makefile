@@ -29,7 +29,7 @@ debug:DEBUG_FLAG = -DGV_DEBUG
 LIB	     = libgv.a
 
 
-all debug:	srcLib parser
+all debug:	srcLib parser aig_map
 	@echo "Checking $(MAIN)..."
 	@cd src/$(MAIN); make --no-print-directory EXTLIB="$(SRCLIBS) $(EXTLIBS)" EXEC=$(EXEC); cd ../.. ;
 
@@ -69,6 +69,7 @@ clean:
 	@echo "Removing $(EXEC)..."
 	@rm -f $(EXEC) 
 	@rm -f parser
+	@rm -f aig_map
 
 ctags:	
 	@rm -f src/tags
@@ -98,3 +99,6 @@ linux18 linux16 mac:
 
 parser: parser.cpp
 	g++ parser.cpp -o2 -o parser
+
+aig_map: aig_map.cpp
+	g++ aig_map.cpp -o2 -o aig_map

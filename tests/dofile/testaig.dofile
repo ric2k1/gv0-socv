@@ -1,7 +1,0 @@
-set engine abc
-read design -aig tests/inputs/merge.aig
-blast ntk
-pr i -v
-set sys vrf
-satv bm 2 2 2 2
-q -f

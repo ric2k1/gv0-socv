@@ -1,0 +1,47 @@
+#IO handling
+input=$1
+match=$2
+dir="${input::-5}"
+read line < $input
+circuit_1=$line
+while read line; do
+    if [[ "${line:(-2):2}" == ".v" ]]; then
+        circuit_2=$line
+    fi
+done < $input
+circuit_1=$dir$circuit_1
+circuit_2=$dir$circuit_2
+
+#delete old file
+rm -rf "$dir"*.aig "$dir"*.aag "$dir"name "$dir"gv.dofile
+
+#write dofile
+echo "abccmd read_verilog ${dir}1.v" >> "$dir"gv.dofile
+echo "abccmd strash" >> "$dir"gv.dofile
+echo "abccmd write_aiger -s ${dir}1.aig" >> "$dir"gv.dofile
+echo "abccmd write_aiger ${dir}circuit_1.aig" >> "$dir"gv.dofile
+echo "abccmd read_verilog ${dir}2.v" >> "$dir"gv.dofile
+echo "abccmd strash" >> "$dir"gv.dofile
+echo "abccmd write_aiger -s ${dir}2.aig" >> "$dir"gv.dofile
+echo "abccmd write_aiger ${dir}circuit_2.aig" >> "$dir"gv.dofile
+echo "q -f" >> "$dir"gv.dofile
+
+#create aag name file
+./parser $circuit_1 ${dir}1.v
+./parser $circuit_2 ${dir}2.v
+./gv -f "$dir"gv.dofile
+rm -rf "$dir"1.v
+rm -rf "$dir"2.v
+./aigtoaig "$dir"1.aig "$dir"1.aag
+./aigtoaig "$dir"2.aig "$dir"2.aag
+./aigtoaig "$dir"circuit_1.aig "$dir"circuit_1.aag 
+./aigtoaig "$dir"circuit_2.aig "$dir"circuit_2.aag
+./aig_map "$dir"1.aag "$dir"2.aag "$dir"name
+rm -rf "$dir"gv.dofile
+rm -rf "$dir"*.aig
+rm -rf "$dir"1.aag
+rm -rf "$dir"2.aag
+
+#execution
+#./ "$dir"circuit_1.aag "$dir"circuit_2.aag "$dir"name "$match"
+#rm -rf "$dir"*.aig "$dir"*.aag "$dir"name "$dir"gv.dofile
