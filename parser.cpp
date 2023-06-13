@@ -12,12 +12,10 @@ constexpr unsigned int str2int(const char* str, int h = 0){
 
 int main(int argc, char *argv[]){
     char *in_filename = argv[1];
-    string out_filename = argv[2], tag = argv[3], line, buf;
-    tag += "_";
+    string out_filename = argv[2], line, buf;
     ifstream in_file(in_filename);
     cout<<out_filename<<endl;
     ofstream out_file(out_filename);
-    cout<<out_file.is_open()<<endl;
     //cerr<<in_filename<<" "<<tag<<endl;
 
     //Module
@@ -41,7 +39,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
 
-		buf.insert(pos, tag);
+		//buf.insert(pos, tag);
         pos = buf.find(",", pos);
 		if(pos == -1){
             break;
@@ -71,7 +69,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
 
-		buf.insert(pos, tag);
+		//buf.insert(pos, tag);
         pos = buf.find(",", pos);
 		if(pos == -1){
             break;
@@ -101,7 +99,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
 
-		buf.insert(pos, tag);
+		//buf.insert(pos, tag);
         pos = buf.find(",", pos);
 		if(pos == -1){
             break;
@@ -131,7 +129,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
 
-		buf.insert(pos, tag);
+		//buf.insert(pos, tag);
         pos = buf.find(",", pos);
 		if(pos == -1){
             break;
@@ -162,7 +160,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
         var1 = buf.substr(pos, cut_pos);
-        if(var1 != "1'b0" && var1 != "1'b1") var1 = tag + var1;
+        //if(var1 != "1'b0" && var1 != "1'b1") var1 = tag + var1;
 
         //var2
         pos = buf.find(", ", pos) + 2;
@@ -172,7 +170,7 @@ int main(int argc, char *argv[]){
             return 0;
         };
         var2 = buf.substr(pos, cut_pos);
-        if(var2 != "1'b0" && var2 != "1'b1") var2 = tag + var2;
+        //if(var2 != "1'b0" && var2 != "1'b1") var2 = tag + var2;
 
         //var3
         pos = buf.find(", ", pos);
@@ -180,7 +178,7 @@ int main(int argc, char *argv[]){
             pos += 2;
             cut_pos = buf.find_first_of(" ", pos) - pos;
             var3 = buf.substr(pos, cut_pos);
-            if(var3 != "1'b0" && var3 != "1'b1") var3 = tag + var3;
+            //if(var3 != "1'b0" && var3 != "1'b1") var3 = tag + var3;
         }
 
         stringstream ss;

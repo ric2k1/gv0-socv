@@ -46,7 +46,7 @@ SATMgr::booleanMatching(int nPI1, int nPI2, int nPO1, int nPO2) {
     GVSatSolver* matrixSolver = new GVSatSolver(gvNtkMgr);
     GVSatSolver* miterSolver = new GVSatSolver(gvNtkMgr);
     // pRes.setSatSolver(matrixSolver);
-
+    /*
     for (int i = 0; i < gvNtkMgr->getOutputSize(); ++i) {
         miterSolver->addBoundedVerifyData(gvNtkMgr->getOutput(i), 0);
     }

@@ -1,10 +1,8 @@
-abccmd read ./tests/inputs/test1.v
+abccmd read_verilog ./tests/inputs/test1.v
 abccmd strash
-abccmd append tests/inputs/test2.v
-abccmd write_verilog tests/inputs/merge.v
+abccmd write_aiger -s ./tests/inputs/test1.aig
 
-read design -v tests/inputs/merge.v
-blast ntk
-set system vrf
-satv bm
+abccmd read_verilog ./tests/inputs/test2.v
+abccmd strash
+abccmd write_aiger -s ./tests/inputs/test2.aig
 q -f

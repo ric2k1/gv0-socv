@@ -1,21 +1,8 @@
-./parser ./CAD_testdata/case01/circuit_1.v ./CAD_testdata/case01/1.v 1
-./parser ./CAD_testdata/case01/circuit_2.v ./CAD_testdata/case01/2.v 2
-./parser ./CAD_testdata/case02/circuit_1.v ./CAD_testdata/case02/1.v 1
-./parser ./CAD_testdata/case02/circuit_2.v ./CAD_testdata/case02/2.v 2
-./parser ./CAD_testdata/case03/circuit_1.v ./CAD_testdata/case03/1.v 1
-./parser ./CAD_testdata/case03/circuit_2.v ./CAD_testdata/case03/2.v 2
-./parser ./CAD_testdata/case04/circuit_1.v ./CAD_testdata/case04/1.v 1
-./parser ./CAD_testdata/case04/circuit_2.v ./CAD_testdata/case04/2.v 2
-./parser ./CAD_testdata/case05/circuit_1.v ./CAD_testdata/case05/1.v 1
-./parser ./CAD_testdata/case05/circuit_2.v ./CAD_testdata/case05/2.v 2
-./parser ./CAD_testdata/case06/circuit_1.v ./CAD_testdata/case06/1.v 1
-./parser ./CAD_testdata/case06/circuit_2.v ./CAD_testdata/case06/2.v 2
-./parser ./CAD_testdata/case07/circuit_1.v ./CAD_testdata/case07/1.v 1
-./parser ./CAD_testdata/case07/circuit_2.v ./CAD_testdata/case07/2.v 2
-./parser ./CAD_testdata/case08/circuit_1.v ./CAD_testdata/case08/1.v 1
-./parser ./CAD_testdata/case08/circuit_2.v ./CAD_testdata/case08/2.v 2
-./parser ./CAD_testdata/case09/circuit_1.v ./CAD_testdata/case09/1.v 1
-./parser ./CAD_testdata/case09/circuit_2.v ./CAD_testdata/case09/2.v 2
-./parser ./CAD_testdata/case10/circuit_1.v ./CAD_testdata/case10/1.v 1
-./parser ./CAD_testdata/case10/circuit_2.v ./CAD_testdata/case10/2.v 2
-./gv -f ./tests/dofile/run_all.dofile
+for ((i = 1 ; i < 11 ; i++)); do
+    if [[ ${#i} -eq 1 ]]; then
+        num=0"$i"
+    else
+        num="$i"
+    fi
+    ./tests/sh/bmatch ./CAD_testdata/case"$num"/input ./CAD_testdata/case"$num"/match
+done
