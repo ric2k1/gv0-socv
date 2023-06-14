@@ -71,7 +71,7 @@ void mapping(char *in_filename, ofstream& out_file){
         out_file<<in_filename[strlen(in_filename)-5]<<" input "<<input[i].name<<" "<<input[i].var<<endl;
     }
     for(int i = 0; i < nPO; i++){
-        out_file<<in_filename[strlen(in_filename)-5]<<" output "<<input[i].name<<" "<<output[i].var<<endl;
+        out_file<<in_filename[strlen(in_filename)-5]<<" output "<<output[i].name<<" "<<output[i].var<<endl;
     }
     in_file.close();
 }

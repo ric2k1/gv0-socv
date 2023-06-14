@@ -52,7 +52,7 @@ SATMgr::booleanMatching(int nPI1, int nPI2, int nPO1, int nPO2) {
     }
     miterSolver->add_XNOR_gate(gvNtkMgr->getInput(0), gvNtkMgr->getInput(nPI1));
     assert(0);
-
+    */
     //cout<<"be "<<gvNtkMgr->getNetSize()<<endl;
     //gvNtkMgr->createNet();
     //cout<<"af "<<gvNtkMgr->getNetSize()<<endl;
